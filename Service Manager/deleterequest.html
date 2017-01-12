@@ -1,0 +1,704 @@
+/* -------------------- Check Browser --------------------- */
+
+function browser() {
+	
+	var isOpera = !!(window.opera && window.opera.version);  // Opera 8.0+
+	var isFirefox = testCSS('MozBoxSizing');                 // FF 0.8+
+	var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+	    // At least Safari 3+: "[object HTMLElementConstructor]"
+	var isChrome = !isSafari && testCSS('WebkitTransform');  // Chrome 1+
+	//var isIE = /*@cc_on!@*/false || testCSS('msTransform');  // At least IE6
+
+	function testCSS(prop) {
+	    return prop in document.documentElement.style;
+	}
+	
+	if (isOpera) {
+		
+		return false;
+		
+	}else if (isSafari || isChrome) {
+		
+		return true;
+		
+	} else {
+		
+		return false;
+		
+	}
+	
+}
+
+/* ---------- IE8 list style hack (:nth-child(odd)) ---------- */
+
+jQuery(document).ready(function($){
+	
+	if($('.messagesList').width()) {
+		
+		if(jQuery.browser.version.substring(0, 2) == "8.") {
+
+			$('ul.messagesList li:nth-child(2n+1)').addClass('odd');
+			
+		}
+		
+	}
+	
+});	
+
+$(document).ready(function(){
+		
+			
+	$("#username").focus(function() {
+		
+		$(this).parent(".input-prepend").addClass("input-prepend-focus");
+	
+	});
+	
+	$("#username").focusout(function() {
+		
+		$(this).parent(".input-prepend").removeClass("input-prepend-focus");
+	
+	});
+	
+	$("#password").focus(function() {
+		
+		$(this).parent(".input-prepend").addClass("input-prepend-focus");
+	
+	});
+	
+	$("#password").focusout(function() {
+		
+		$(this).parent(".input-prepend").removeClass("input-prepend-focus");
+	
+	});
+	
+				
+	/* ---------- Add class .active to current link  ---------- */
+	$('ul.main-menu li a').each(function(){
+		
+			if($($(this))[0].href==String(window.location)) {
+				
+				$(this).parent().addClass('active');
+				
+			}
+	
+	});
+	
+	$('ul.main-menu li ul li a').each(function(){
+		
+			if($($(this))[0].href==String(window.location)) {
+				
+				$(this).parent().addClass('active');
+				$(this).parent().parent().show();
+				
+			}
+	
+	});
+	
+	/* ---------- Submenu  ---------- */
+	
+	$('.dropmenu').click(function(e){
+
+		e.preventDefault();
+
+		$(this).parent().find('ul').slideToggle();
+	
+	});
+			
+	/* ---------- Acivate Functions ---------- */
+	template_functions();
+	init_masonry();
+	sparkline_charts();
+	charts();
+	calendars();
+	growlLikeNotifications();
+	widthFunctions();
+	
+	if(jQuery.browser.version.substring(0, 2) == "8.") {
+		 
+		//disable jQuery Knob
+		
+	} else {
+		
+		circle_progess();
+		
+	}
+	
+	chart();
+	messageLike();	
+	
+});
+
+/* ---------- Like/Dislike ---------- */
+
+function messageLike(){
+	
+	if($('.messagesList')) {
+		
+		$('.messagesList').on('click', '.star', function(){
+			
+			$(this).removeClass('star');
+			
+			$(this).addClass('dislikes');
+			
+			//here add your function
+			
+		});
+		
+		$('.messagesList').on('click', '.dislikes', function(){
+			
+			$(this).removeClass('dislikes');
+			
+			$(this).addClass('star');
+			
+			//here add your function
+			
+		});		
+		
+	}	
+	
+}
+
+/* ---------- Check Retina ---------- */
+
+function retina(){
+	
+	retinaMode = (window.devicePixelRatio > 1);
+	
+	return retinaMode;
+	
+}
+
+/* ---------- Chart ---------- */
+
+function chart(){
+	
+	if($('.verticalChart')) {
+		
+		$('.singleBar').each(function(){
+			
+			var theColorIs = $(this).parent().parent().parent().css("background");
+			
+			var percent = $(this).find('.value span').html();
+			
+			$(this).find('.value span').css('color',theColorIs);
+			
+			$(this).find('.value').animate({height:percent}, 2000, function() {
+			    
+				$(this).find('span').fadeIn();
+			 
+			});
+			
+		});
+		
+	}
+	
+}
+
+/* ---------- Masonry Gallery ---------- */
+
+function init_masonry(){
+    var $container = $('.masonry-gallery');
+
+    var gutter = 6;
+    var min_width = 250;
+    $container.imagesLoaded( function(){
+        $container.masonry({
+            itemSelector : '.masonry-thumb',
+            gutterWidth: gutter,
+            isAnimated: true,
+              columnWidth: function( containerWidth ) {
+                var num_of_boxes = (containerWidth/min_width | 0);
+
+                var box_width = (((containerWidth - (num_of_boxes-1)*gutter)/num_of_boxes) | 0) ;
+
+      n class="icon yellow"><i class="icon-shopping-cart"></i></span>
+										<span class="message">2 items sold</span>
+										<span class="time">1 hour</span> 
+                                    </a>
+                                </li>
+								<li class="warning">
+                                    <a href="#">
+										<span class="icon red"><i class="icon-user"></i></span>
+										<span class="message">User deleted account</span>
+										<span class="time">2 hour</span> 
+                                    </a>
+                                </li>
+								<li class="warning">
+                                    <a href="#">
+										<span class="icon red"><i class="icon-shopping-cart"></i></span>
+										<span class="message">New comment</span>
+										<span class="time">6 hour</span> 
+                                    </a>
+                                </li>
+								<li>
+                                    <a href="#">
+										<span class="icon green"><i class="icon-comment-alt"></i></span>
+										<span class="message">New comment</span>
+										<span class="time">yesterday</span> 
+                                    </a>
+                                </li>
+								<li>
+                                    <a href="#">
+										<span class="icon blue"><i class="icon-user"></i></span>
+										<span class="message">New user registration</span>
+										<span class="time">yesterday</span> 
+                                    </a>
+                                </li>
+                                <li class="dropdown-menu-sub-footer">
+                            		<a>View all notifications</a>
+								</li>	
+							</ul>
+						</li>
+						<!-- start: Notifications Dropdown -->
+						<li class="dropdown hidden-phone">
+							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+								<i class="halflings-icon white tasks"></i>
+							</a>
+							<ul class="dropdown-menu tasks">
+								<li class="dropdown-menu-title">
+ 									<span>You have 17 tasks in progress</span>
+									<a href="#refresh"><i class="icon-repeat"></i></a>
+								</li>
+								<li>
+                                    <a href="#">
+										<span class="header">
+											<span class="title">iOS Development</span>
+											<span class="percent"></span>
+										</span>
+                                        <div class="taskProgress progressSlim red">80</div> 
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+										<span class="header">
+											<span class="title">Android Development</span>
+											<span class="percent"></span>
+										</span>
+                                        <div class="taskProgress progressSlim green">47</div> 
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+										<span class="header">
+											<span class="title">ARM Development</span>
+											<span class="percent"></span>
+										</span>
+                                        <div class="taskProgress progressSlim yellow">32</div> 
+                                    </a>
+                                </li>
+								<li>
+                                    <a href="#">
+										<span class="header">
+											<span class="title">ARM Development</span>
+											<span class="percent"></span>
+										</span>
+                                        <div class="taskProgress progressSlim greenLight">63</div> 
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+										<span class="header">
+											<span class="title">ARM Development</span>
+											<span class="percent"></span>
+										</span>
+                                        <div class="taskProgress progressSlim orange">80</div> 
+                                    </a>
+                                </li>
+								<li>
+                            		<a class="dropdown-menu-sub-footer">View all tasks</a>
+								</li>	
+							</ul>
+						</li>
+						<!-- end: Notifications Dropdown -->
+						<!-- start: Message Dropdown -->
+						<li class="dropdown hidden-phone">
+							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+								<i class="halflings-icon white envelope"></i>
+							</a>
+							<ul class="dropdown-menu messages">
+								<li class="dropdown-menu-title">
+ 									<span>You have 9 messages</span>
+									<a href="#refresh"><i class="icon-repeat"></i></a>
+								</li>	
+                            	<li>
+                                    <a href="#">
+										<span class="avatar"><img src="img/avatar.jpg" alt="Avatar"></span>
+										<span class="header">
+											<span class="from">
+										    	Dennis Ji
+										     </span>
+											<span class="time">
+										    	6 min
+										    </span>
+										</span>
+                                        <span class="message">
+                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                        </span>  
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+										<span class="avatar"><img src="img/avatar.jpg" alt="Avatar"></span>
+										<span class="header">
+											<span class="from">
+										    	Dennis Ji
+										     </span>
+											<span class="time">
+										    	56 min
+										    </span>
+										</span>
+                                        <span class="message">
+                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                        </span>  
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+										<span class="avatar"><img src="img/avatar.jpg" alt="Avatar"></span>
+										<span class="header">
+											<span class="from">
+										    	Dennis Ji
+										     </span>
+											<span class="time">
+										    	3 hours
+										    </span>
+										</span>
+                                        <span class="message">
+                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                        </span>  
+                                    </a>
+                                </li>
+								<li>
+                                    <a href="#">
+										<span class="avatar"><img src="img/avatar.jpg" alt="Avatar"></span>
+										<span class="header">
+											<span class="from">
+										    	Dennis Ji
+										     </span>
+											<span class="time">
+										    	yesterday
+										    </span>
+										</span>
+                                        <span class="message">
+                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                        </span>  
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+										<span class="avatar"><img src="img/avatar.jpg" alt="Avatar"></span>
+										<span class="header">
+											<span class="from">
+										    	Dennis Ji
+										     </span>
+											<span class="time">
+										    	Jul 25, 2012
+										    </span>
+										</span>
+                                        <span class="message">
+                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                        </span>  
+                                    </a>
+                                </li>
+								<li>
+                            		<a class="dropdown-menu-sub-footer">View all messages</a>
+								</li>	
+							</ul>
+						</li>
+						<!-- end: Message Dropdown -->
+						<li>
+							<a class="btn" href="#">
+								<i class="halflings-icon white wrench"></i>
+							</a>
+						</li>
+						<!-- start: User Dropdown -->
+						<li class="dropdown">
+							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+								<i class="halflings-icon white user"></i> Dennis Ji
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-menu-title">
+ 									<span>Account Settings</span>
+								</li>
+								<li><a href="#"><i class="halflings-icon user"></i> Profile</a></li>
+								<li><a href="login.html"><i class="halflings-icon off"></i> Logout</a></li>
+							</ul>
+						</li>
+						<!-- end: User Dropdown -->
+					</ul>
+				</div>
+				<!-- end: Header Menu -->
+				
+			</div>
+		</div>
+	</div>
+	<!-- start: Header -->
+	
+		<div class="container-fluid-full">
+		<div class="row-fluid">
+				
+			<!-- start: Main Menu -->
+			<div id="sidebar-left" class="span2">
+				<div class="nav-collapse sidebar-nav">
+					<ul class="nav nav-tabs nav-stacked main-menu">
+						<li><a href="servicemanager.html"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Service Manager </span></a></li>		
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Customer Requests </span></a>
+							<ul>		
+								<li><a class="submenu" href="createrequest.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> Create Request</span></a></li>
+								<li><a class="submenu" href="assignrequest.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> Assign Request</span></a></li>
+								<li><a class="submenu" href="modifyrequest.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> Modify Request</span></a></li>
+								<li><a class="submenu" href="deleterequest.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> Delete Request</span></a></li>								
+							</ul>	
+						</li>
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Reports  </span></a>
+							<ul>		
+								<li><a class="submenu" href="viewreport.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> View Reports </span></a></li>
+								<li><a class="submenu" href="downloadreport.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> Download Reports </span></a></li>							
+							</ul>	
+						</li>
+						<li><a href="sparerequirement.html"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Spare Requirements </span></a></li>		
+						<li>
+						<li><a href="login.html"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Logout </span></a></li>												
+					</ul>
+				</div>
+			</div>
+			<!-- end: Main Menu -->
+			
+			<noscript>
+				<div class="alert alert-block span10">
+					<h4 class="alert-heading">Warning!</h4>
+					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
+				</div>
+			</noscript>
+			
+			<!-- start: Content -->
+			<div id="content" class="span10">
+			
+			
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home"></i>
+					<a href="index.html">Home</a>
+					<i class="icon-angle-right"></i> 
+				</li>
+				<li>
+					<i class="icon-edit"></i>
+					<a href="#">Service Manager</a>
+				</li>
+			</ul>
+			
+			<div class="row-fluid sortable">
+				<div class="box span12">
+					<div class="box-header" data-original-title>
+						<h2><i class="halflings-icon edit"></i><span class="break"></span>Form Elements</h2>
+						<div class="box-icon">
+							<a href="deleterequest.php" ><i class="halflings-icon refresh"></i></a>
+							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+						</div>
+					</div>
+					<div class="box-content">
+						<form class="form-horizontal">
+						  <fieldset>
+							<div class="box-content">
+						<table class="table table-striped table-bordered bootstrap-datatable datatable">
+						  <thead>
+							  <tr>
+								  <th>Customer Name</th>
+								  <th>Customer ID</th>
+								  <th>Date</th>
+								 
+								  <th>Actions</th>
+							  </tr>
+						  </thead>   
+						  <tbody>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/25</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/25</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/25</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/25</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/29</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/29</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/25</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/25</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/29</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/29</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center">Customer ID</td>
+								<td class="center">2015/02/29</td>
+								
+								<td class="center">
+									
+									
+									<a class="btn btn-danger" href="#">
+										<i class="halflings-icon white trash"></i>  Delete Request 
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Customer Name</td>
+								<td class="center"êXI'§ßÇˆÿ †ŒrÅR9£-ŒyH¬rÙúãA]Ï“|w£â{NÚM2rŠ³ryú…@ÛgAœ±û¿ğ¿yíf•Èl$uß$¦q ~õşß±öÅ»¬ÄóôÄ•Qäô^«äù…)fémş¶´@EeYL¬ÃVV9Ñ$?NĞñÉ*±ã+…Æ0<cÖh‰‘@~Â`yÇÔh%ZÌ~î#?ir«.s¿ãü4±Qe^lTI·OõÆ‚ÁlÎ¡c@Î·øà7ÁĞ)ùE^§³è{ˆ;:1v!®ö¢AÉUãFeq¸İ[ÆƒÂº¿‰üP×øšÍÓVg½Õôy°Ü¤–{x–F`wi#R	ñ´	»¯ôÑ|k·šŸ[DÁÒ$P°)-ûÌ¿«˜™WÃóĞ~‹éú¾·§¤½gKU©uU†¼-#HK3™ïrÍå¾»h#s¿¶¤^M“¶2şt?	N	 “ç9ÏÎ‚×š	Ht^ )`¿QàÏÎ‚‡1HD!ÊÉ(Ã€7 úç@T¢}ÈòñøU9pÜh2?'o‘šo…,c¹…¦*€Æ	8ÈV
+N2=4Sä_»İ½*Œ“->Ï°—¬¨ÒYŒ~)rS‰â¿Úmô­òİŸn;	Û°¯$Z2JbûV§ı<@¾KíA¾ƒağÿ œ|úO•İøÿ aÖÇ~¯Yr(;ëñÅ
+şÜC2»Éû¹Æ şZcã:!Vò–Bc'|Ã@—÷ÓÇğîò«3ÖN8‰ÄˆÃ?–4nÒô‰»œI<V%†Àë ßéãş:YkG¾øXsÁ›å}ôÉ!a»
+÷`gñ ôŸÖÌb‘g,ÒÂNbÃ¼úıF€íÉ
+B0ÎdâT€XËúè	rÍ“CÀ†(ª<Ÿ_üó œ³$aÀ@ø#‹“ã| ¤Û*#Ä}°#ÎGœãé-hLíä <¸‚AÆ‚iiÙ}ÈòÏ Q¶F>º´Öd<Y•# 	Xò}ş‘Mít¼0Cú™WÀ‹?Ú|ÿ İ qO±¡N­
+±F±ÇM%P2ˆ#ˆvı4ğ9¿AÑö” …kÆ;{ÒSà¤²—UPŒo¾ƒs›`r.ìåHİyzgÈún_i™¤2Œ ¤[éäè[Öd‘"iYã‡R3¶2Aúh;·s™£%È\ÿ NşĞvW°©Ä027ÚxííŒúñ®€8æ°³'·#"¨ÉÇÎÿ ÕŸSã@Ú9 rÓ¸`ìûzdzoàh)2.ò‰DIŒ£`îÀì6ßp4;Ë4ğ†cÁ‰%_§üps¸ñ `(ÀáÈÀ7[Š“õÛĞh<ó÷0hõİlxwŸ²¤…0qaNÃ8c>6Ğ!³ÿ œ»¹¦LÑYìg‘°	-[¯Pgò—Aùu!$0T';ÿ &é:ØO¶¡@«,Àù;œähşáõ°Ş—âˆ­dì­<^Ê X–$‹$QŒp<h7¯G^ÿ Çmuõ¢)Ö´‹ÖÎWØ›ÛşËÇ•àØğ4}ûaÖµ.†¨Í)½…\—ÏêkÇ.9`xlŒ~N«ÔÈ$Èî„p¶`H íêN‚¹º—FÛe ¿¶G‚?M´	ŠXàÚß¨F¶Ë¶H××AcÙh#DUFq‡Üã}Üçøè&“Ç	#c2¸eRÊ0ÛÇñşZ ±k¹£$²ÊûŞº{ÑB¶€ëáÜgu]ò $í ©ˆ•ë†˜‡°Àª°Û g‹}2ÙĞQbï	’fÂª³ñ ç ( Ä’şà|§å)k¢œÕêÕI½,N‰^@"\ñÿ âè06ûßİŠ²Y[ì'è"ŠkMïE/²å"Áõ%Ğu>Uû¥Â	'È%÷b†bgXıÆEÂœ;çÇã #®ıÈù”·eëmôPvB9’¤ò-0’BÎxN›)ÏÔh=‘*~–´Ò±`Uı¹Ğî¾}79ñë N²¡¡öÀä9ó ‘Ëå §°ƒÜdäñp”xlùõÜ:M™£Aì€ä\'  ıß]•eˆÜ€¿Ÿè8ÉÎ‚á'¾¬“nU`‡9$±?†ú­Æ‚˜yˆ%Ã9±é¾€È'FÂ@,–+ÈŸø9Ğ5†(ÌR<ƒİ’eâ@8ûúƒË?t~-Óv_í»©£”öıO_:S°’2ı€†UuS†âwñ±øÄºúY‡«WıGÆªŞ.ZBÆÃÚ…^PK¶ ãë gGñ¶ù ¥OUå»Ş¡‡‰U1E^&ûûlvšCı—£ÖÑı¼øıŠõc¯g»C'carib‘Ğ3NáG§òO'.T1Œ=1±¹ó ˆ¬¨êa «·àÅA9fúQ œÂ:<cìÙeşGü4CìHå™À RùãAj[«²ªÈT¤»);Cëœc?M¾ÖhluŸ)Ud¥f¼v¦$F"ñBÜC`dã8ÛAæÅßt1õvî|¢ƒ“­ë½|eıéV¸s‹’ ÊÏ *s"×îÇW¯^¡º¡%f›­rÒZÉë8˜[íO÷ÉÇã Ñß„!Ú>†¼¸0÷ße$ì0	Ğ[÷Óİ”ø³HĞìNÜppv;è5ßıåøïÉ¯Vé¤ëdê{¯íÓq"HèŒÅp@R|è7‡µŞ5Ò<FÛ#éƒõÆ‚mbHm­ıP±°aå† 8 yĞ[nêØHø$Ä¸Ç¦ä`¿ ¾,Ô°yJ@äÉˆU$àmŒ’4/ñw|GáY`»îŞÃ;z4P\“<³øù?Äh%V1%² CñY‡ÒIÚÓÿ -¯Ôı_Éu»%ñ7Èã0AV0ÃøsĞzE¶¯¬ÒŞ"¥Z0DÏ„	Ÿ'ÓÆƒÜ|Óà·hŞëlv¯y&fe‚hù(*Äçƒ¶Û°ùgÇ.Y{fêåP¬¯rk°Ÿº4Œ¯†8 Ğ[{-©ºihõŸ»w®ì'“ÿ ör"×¬’F'2ÁˆâF>‡AìT©]¼¶$X…œ öÌ%d¸ÆƒæêL\b”i#e2˜qß?ËAD´¦XÑÔ`ËÎŞ£óÎÚ
+lÁ89Œm!gİqèÀn~º‘ÙÌq€S
+›ö¼ı|è:ÉìÅ’^\ùr pôº
+ã{sqˆ"¨(ŞS?N9Îß]RR8(Pù1ÜmŒë1‰× 	<«n~Ò–ùğÀcAa‰â+4\âœ>œq c+P1Y.cû–!“Èùaôü<è|·÷©ømØúë4šıûÕMÈa÷}…HÕør.¹ìFƒ7ï˜‡A°Ê]ŒvØŸ>SÎƒêß¾ıf¿øñ`Çî"É?jì1”ó c_÷¿â²Jü}êÒ±Ë¬mŠ1ä}ÁtZ_2ø¯Ê`fê»F’Ê²¤|ğ{m‚úNH8#ÀĞX·%#Ù’”Ë°öe`V$¿$}21 ì²œ‰£Ba»'ö:mØpÃ„ {gï^<•˜“ıGé“ ½5¢çr2îêr§ˆÇ¦vß
+?ÈÚoq<r¼m¸ÀÈ?†ƒó>ûã¿ªé:îß±³Féìİ8Ò$))«™0ef›y,-"—üNY/ØNÛ±jöVÒÍv.ºY Å‡‹$M(x¬\IƒAzïGÚOñy£î²?Í?}\ş™œZ`…+#qûy“ü´|Šo÷]eã†ë”¥I —dÈØc€øf²ñ†‚I³Ÿr2GöƒìF>š
+>7Ô²D¦(½•Hâ_Ó
+<+ëô{SÕ/“Ü2>r#<p8ã?_á Z;>Q°š68@¾Ø;àú±ğt
+ZğhİÑä«Ç&Øá¿¯§Ôè	aáN%Ï&d9PvĞÖáV
+ÂFÊsç89Ğ~ÂW¬ZI} T¯³ı
+¿íÉ$úùĞ*C]®Ç(¸Œ=µ_h¶ÌùÛÆßÓ¾Nú¶#‘9Pè *rí“\mŸòÙëæ‘êÊÜ$Pxs¼‚°†àh<·÷V¬u¾> `¸±vŒy@ÚÏÈÿ 1üt wµ•»®ÊœS†/kãÔ«…ÁÙå’b21¸øĞ$©'.ï­2”ı1î{‹¥ã’@­lŒŒíãAwí”±Y‘Ş•AÙöÓä'|ôòFƒÑÒ+…ğì¹»•<]y)ÿ p#ÈñĞ'½×9Ì5›Œ¶®AÁlãs Îßµv¡–¬P9r8Äë÷(N@;ùĞ{‘ °Êap[h;grF9Ğ3hãzÑ¯¹ÍŠ•%v<XÇ©Û@ –>J#Q(eÏ»Ä§‰"ÆG¶æBc_h .ÆäïŸM‹%ÁqÜX!;øÜhy"€³8ˆFÜ•Ù9ø ãÇü4~K$—ş?ŞÓª¦pım”âTmˆÄIÆFƒc¥î;ô©[¬¹,ŸüXÅÃÚqıÑ%göòT}ßaÀĞlz¿Šw1÷PÙn²hãƒ±î&÷§@sˆcXÏãÈ>O¹øÏÃúN§¹¤ÔîÒªÓ•”°bB¤$`‚ƒS'uí‚Dä?²Â©<AØúù'@e~ËiøNbx‰`ª¤sUPI ùÈ8ĞQıÎÅáš;>ÒÚhå™•UO®şq€úëHÑÌÈÊ76Ø0]ñœädúd§&ULIé]ñ>3ç@“åvO^²’{ş‘ã’ËgÜ`¤ä~;`…|O­ƒã¤ì:Š—û>Ò±—¸³v!<ÌœÂG'ğ‚0(ÀAáß<é«ÒùœëÕR:×·B¼Ñˆ¹¤Aãæ¾Ú`‘È©ÉA¿éºnºJ?	IéVbô{9– Iâs÷œÜs¶|høßKKüŸÃu±Ì–>?rk5Ù2'"X‚òS³6NÄœãé öƒãT,õ=ÇÈ¬u0MÚRï.'[|“î×QÅx¦û“¾Wr†¿ØoúP3’¡T}~íô=†)?ÚùHÊ#&Ä88Î2H4Ğ{]B1WˆÜàŒ ¤ãıt¬Z¯{{2Õ†ª·½<h®àdà•vÉÜè<ö¬ß¶]OÓuå¶äŠ{véLcdº“W3®‘Âq‘ëİWÈjå½F‡]ò¹o\µn„•*l´­B¹¯ N3œ¹ñôĞhş+/Äª¿Ëaøïi?kv×y=îÖHÿ ö“:,mñ9}½úèü«ª©òov]ecŒ]ŠÅ˜6x¼2:“·%pƒò‡Îşß‡ã²§È'ì,w¶Z¤’{b5MĞsâçÏš¯ìëØ»ÔQå3fßU?k,Ï
+‘
+ÄPÂÉ÷rçç>4¥øGe5OØ¯Ù!ÿ äÆÉ‚¹^ë+¹g;ä7±õßAòw=Ïíï]ĞüŸ«»kô÷Ì‹×…£Ø•	ŠÅH m ı‰ÖöÏZ„ÖdanzÑK-vği3†r[ês¶¤Îämñ,¾<œl	‡¦‚G‰8FË'$|p~Ó'ë ØYdYœçgp ØmøãAjxùF±ñEl¤¸#“VsëŸùh-ŠµÌ£ï€ÌÙä9ÛRt™«£m–O´cÆNs¾ùÇ“ ãF›ÜÜÂ2ç`|Àèš(˜J%g‘/Ë?Óü1ã âIaS™‹ÚâÜy(#Æ Í÷?é¾J‘OßôÑ]³Ô,Ã±hÚ$•9
+2œAÛmæ‹üS¥±ûuòşç_eØõ’]ö{wÆ¾ĞöÈ±ıl
+ìt¸ş!ÑGÙ×§?X©úO‹~¾Î^Dçc>}Ùm·àtü{ãu¾Ûáı_ß]·A?aÛ:\ÈŒŠ²«:°_$ğĞû/ñøû>îßÊdìeüo¸¹J—X‰Í&F„$A¶ûw?MéëSC$_«NJ"bÑB£şœúè2“ØyÖÁ÷Øò®…¤—\ãÉúè(‚×c2ÂÒ2B“rHFdŒí±Áß@TV.²0HÂ¢d*©R@ÇvÛÆ‚a$™d˜/¹?´yr;¯ãçĞı4ó¿‹Ïß|çâ½3BoGjuâ­TÁŸ%È]ÀÇã´Ó§^#WûiIPı›*·‘ òiºˆº¿Üş¼Õ¬ë›Šì{ÒIå‹`ô§ “Ÿ]°ÃN9 f•VU“”¨Fd8cŸ¸ı20t³Cï$p÷$ÂŒñ98É\øĞLC
+M !sÌÀuà»0v9ÿ ¦T—Ç‚)BFde‘/ÜB}¥±·‘œè+ÅZ¬’BŒK,'}ğ1È®s [=ô²êDÅ’Å]ÜTÀ`ïŒù:>îhÕ² jò2Hë 6€ÀcÓ@ºÍ–X¥¼±+:§52dîÛ0'>ÿ ÔÅtaFOb?pÃ)ÆTíüq ŒWb•ÑV3>ã!URÍ†ÉÎwú¦€µ±ØNĞÆŠ‘Ay3•<Fàlvó c4Ê¼¼ba:) oã;'È:¾O×uTÓ³¡ÖÍW±¯rVºî«,p–8@³‚FÚ®|=æîO`ß+é{jwL/Ô…‘Wp?ÜN'Qğ³N^¾K?!ê«U±
+|RX˜JÅÕ‡‚3 'áßŸ éÌïuÍmlÍ<é”(KIÊ.	Ûé Ğµ{, FÅI‘äÀ,H$øÎÿ M mfJå€Iã·ûĞá²q‘€}t
+Å(„¶.òI/ŞÒ+å†2 ÈĞzT¨*#Khn5e‘†sÃ ®ûm ¦=Å¨ñJñ™tz•8`8õôĞ7áiy*†Y#eß–àó 1`Zçõk»Æ¤/ö‚Ø8a ¦s+ÂÊÏÇçV’Ä»‡¦6ñ ®X™““Éœ*irÃaøgÎƒ)óÏ’÷_øËv}Ó™eT±á“-œä  .Ã8Ğe>-Ûüûç=]ÚO˜OÓÓ—ÜƒÛò<àI f(±‚Ç
+»œh9Ø§Íºú6;_)›»RS-1ûfPªy2²’9 İvùÏÇàÖ_ºø—OnÍ¹,Z°­-‰e<˜Ì­‚KùLœ•cc4o•Ì°)ûö“ÇÆ€¤£"Í#{\"‰cÂ®ß×É|Ïá úµUûİD€Æ‘‡ÊãvÈQƒôß«M4N™åŒ ÿ QU$2|dºM,«‹‘lñŒc–säS÷¤w:]rb9,4l’öá&Wa°õã”Ñ¢êêÀf.şÔï!T¢¨%wúè<“³¨-|ŞäK1‚H®õo)#e†\¼m kÔÖ†^·âk7öÖŸÆû«'3†`ëÇˆ—ß$«ÙüFò×?‡Ç¨¬C/9¢<Üññ Sû0ÏÃûYXÉ7yyÄl»&>îYÉÇ®ƒÖW,aÁ¸.c  sä’¤úƒ3#$~ÎSNÑ QËìmÎsä‚t¥"e#–8‹iåqŒ€Ø Eò#-§¶°U"­1æ|9(@Àñ¿şš$ı­øş?uÜP»K´tm__tEr2Â°£´(ğG×AéµN¿´£j”ÔkXyàhª‰îG.``Ø ‚7ÁĞxìı…Gù\='½dş£±æÙ”XG’yúò,	;è?G‡iä+îó,·Èâ2ÜFA?òĞx×î¥ï—~ÜP±º«rI¸”< `ÛçşÃ wşFjö{I¢ 'Oğ¹Vc†PòHÃlú”Ç	àÿ à‘Ã+D7Ç²œà‰ãâø#mÎúä}']ÕşÊ\í®¨ëúpİ½øğA3WHåDÛ†‘€8>4•÷½©Ş“§ªXsEuy	 d}Ï!Ü W?ïuu1!àñ9ßùh?ïWÉRD–!McxÆ‹U2yzäè—÷×åªLpÅY¼”WB@'p0‚sşú|¾°&Š”‘ÈAà^)ø‡Aøgîä.ºŸ²Ví"«5¤¼K”FUä8Ø–õ:Fy_û‘•i #c|1ñ?–F‚¯z(P/¾^e%cöÀSø}Fƒé –H”ä«#HDg‘<¶Gç {2IìAt’TÄ¼¿¤éçÈ'} ¼ÒEBü­4q¢R›š®à‘d€FÙú:øåcö'ävJ7»u.4f< ßİ;ã@_ÊDõû/¼ßÚn«ât+A${ wÅwõcètºµàù›{QÈÒt?¯É•~Øıæf!‰?ÒB±Ğeÿ `j?ÿ ±~6åŞÔ’Ü•PŠy$´‘4¯#šìŸr†Ì
+~§ÀĞ)z‹4ôáŒòûXÂ÷AçÓ:5:€ŠŒŸt©˜ØúÆ£'ÿ ÆÆºU‚º¼eDM/5‘¿ÜrçŒg@±‘¡©—íF‚¬ ?qüG¯ç ÇÅòy­JŸÜ¡JPÅ	qÊb‡ÓatìL¡9i‡º™È¸íÈŸAôqq/›|zÕØTÃZµ‚œ2ÊÜ¤Œ0Îÿ Ó¹:P¤œ…™}É]dUãŒY IÏ>4[æ-,"³<}£Í]‰m÷Rvßé Ôñ(šK0ñ´‚EwVtœ½rtÍUùÆj#ÌkWF,§ú€l0Qøoã@ºİ[SâÕh¢™H%%ÕrIÈ>º	¯_V3VËÖD°Aö“ÉåÄ·õ(ß|`øĞ7÷%hLjĞÅ†‰Ç"Èí–Æ3ë Ô‰Äª–´œÄ*åPŸMñ‰úÚÓÌçxæ•¼ı¬¸ÆÀ`mçm
+ÑA'†‹‰UYT©ç’¤…Ü(ËÆ‚¶ŠTµ,?/mŒzbOé-ù`ÿ - ­ÛÆb–²ö9ˆ à
+dƒ‘€ôû¹ØÉ^?Œ×âĞ<öf$EâJş-‘ ‡Å:dï¾=TØ–ÕZr(5 ¬V9eÁÃÉ<ìBX†âª@Æ4
+¾}ñªê×²èŞü¼„Í?ê¤eu‘„aHÆAØh3ÿ ³jŸÈzJÖVÄ¶%ëŞyYÚHæ€ğ°S%Pãøh?IÇlÉ’a£ç„$ã~@( g@¦ıx ˜å$XÌŸŞr=ÌãÏ}Ç}˜«ÇQg˜K4r.Q’ÙØœ¯Ó@ê;RİA^d¹Œ˜Ú@ûN68ÀĞ<S9ŠHşî0—iIí«1şÿ –€ÊI-kS©e#,ÁÀRëœäÿ VÃ@?[$¶l
+¶–äÍ +öñâÀ0càı£ëùh
+­V&e’^\Î@$œg; e•ÛR ]Ä
+Ä–'í#ë±ÆFƒÉ?ukµŒöá¢’0’s'påŒã>¼¾šß¶pAOà¯V±C$i 9,ó‚îIo®s·á Ø4tœÉ1¬‘+qpU•¤Ø v9ş¬è2ß
+¦Ôºë©ïEÒö“,¬Ä+Ë]Ôı­´…P{PÏn8ŠÆ[vöÈîúñĞ7{=ÕŒM2J¼”a™UpNøÉĞjÂ:0‘K2‰ú8îsM™Mas#ÖYR>âs±ñ–ğ4§`£™R°HâlŒñâêû³ SÛ(¶°q\`¤ñŒ9Û’“ç#×ÈĞV””K6¤JÊ1$±‚ç`T_¹GãütÕ­ûqC´ì{Ù»NÆå¥ğ_gu
+T; ?fA;±Ğ-?!ıéVªOzÓş†Å:fÅ”Ra·ƒ*îƒ€Aôô:ù_íapÇñÔšıÚt›W†t‘Ä‘Œ²@ÏŸ©ĞWñ9onõ6úÿ ‚¯·V­™lX³ï3¤RLÀÈ3"e˜ã ÿ ­ZÂå‡åÙƒÛ`ıß\~F%‘y}•Ê”*r±İsü=4L†Ôñ¤ÊâTÏ³!Çíú°Û rĞ*ùÏéàø¿fŸ«ÊŸ¥Yùy¦HÕ¶“ËÇğĞGãÔ|o¦ÃÅf*‘Â
+ OöÔ‚¤¹*~Š3Kï48”,‰I$œ¿=‡~ßE%’ü±*ÅÉ®Yì8I“É…\˜òŸø{Š¦òX˜°OlqŒ¶IpwüwĞyo4²~ïü^¼±•®¥fgAıĞŠG'íĞ*ù%øR?ÜùkVı<Uºº]jù@ÎA#×ÜÎ€®ã±š;Ÿ-Ä+ ë¾-S­†ø{(Ì ã<†ƒ!óş¾ûåŸµß³ÉJJ2¥šÑ0WEöx7§@è3,ø„?ùÆú({k6ºù°;+ğ€Ó,<C"€\h6ı·í÷Ç:Şÿ á”*	K·ì'‡±[—-(£`Ë‚Nã@u/„|ymüê72Ø‹£Xÿ Ä™Õa.¤–PÈÕbßY[¬ø¿Å/Ôi£íûÊº^»îeçİù Oé\Œ YûßÖuİD—¨Ia—³»:YÌòHpû@ ¸äFF4¡~%ûsñov3wıM ìd©ì´òÙ–agÊ9ì7|è5´íV”I¸ec82HC À9ÎB‘é¶4µhùBÜ½×v.¹;·Ô¶6]¬Ÿİ¼‘×U‰Js‘Xœ+œƒ´¬Ã<rË+Dd(¡pJïËéã|h
+í¾#ßÚé»ØÅXöfŠ¹”ê’2¨r9o# h1Uk¾M[öÆ‰™j,òrç™[Ùûíµ†âBrÇ€HÜèîl>I~?ŸòV‘>I'_ìÇîºñŠ°Ä¸O>p†¤ù-{ÿ +ìc,XìèÃR”&Lºa¹ äßêtÏÛö¿øŸ[Ğ÷sTíÌ–'š»€’Ï GYŠ¸l ü´É˜áqev¬;}ø¶3ı'Ğ õ‚	sf("9g*¤œ–Üÿ hú‚iã¯+¬j¾ÔdNĞåSñüwÎm¼´©,Œ#ZêòF0I.Îõş:ÅîŞHc1×oÔÈ °É'È.Àúc
+&U/bÂ©/$I4n2Å£;Ğ· ª)¦–hfaúhc‰\ääp3'×7:
+eZö{(¹¶jÉ*Ór¼ZE'%86ÆÑºõo<±Ãa„ÑğP@mı úœÀqšK˜/bÀîºòà0v
+Ç®€{ş¢H§XÚb3"œE°Î_# h P'ç1À¨Ì‰Ÿ½A@G€wmÁÎƒ±‰ÿ Gf+q˜ÒGãxÁ~àô©¹$pMsîEíG‡	¤(9ÁÇŒŸÃ@Ê­‰^ÒLViÂıàd*! ä‡Ôg@“³SfHàE(¼ iñ“‚IÁÜœ¾‚‚Bğ–Ik«D«‚à‘œ€ gùè¯t’X} ë¶ë#g8”!Üö¶ ôĞ22Ç<ÄJ=ø’)T¸Ê¶Šã}‡~áŠ>ÃİWd¦UfÂá”ï„É?õĞxîEØ;Ÿ’{	%èú‡
+¼?ô¦–ÀPH `…ĞzI_ªêúŠÔ ‚(QLq•ûU8mƒœŸê9ÎÊe­gâ¿)ŠDK*+	—š16åJ0õƒ]²­Nßá·¡w‚C×{Ee²Ç~J‚wÉĞ~:Rÿ ä%oIUD‘£³>8'–T ÓÆ‚‹Ÿ!±î„q/±`fXÔQ÷bsôR0G¦€y-iGR0%i0LÍÏ$n<c'm¡uW¤J±Z03¬v=˜b
+¾ÜawÈÜŸMÒ™cYYki³2ï˜ò
+€<şo ²½…¯×UUkà‚@yÜ	ütÓ´ÒK²b…[Ş(bA'o®<c@ÚVÏ1VşË*à;²Ÿà2= í*Áj©§Ô²(ä«Äà…Î6+’wĞf¾m!ìş5ÚVâBËeuû>àÊsøÿ N€¿İ‹ªè:«RU­[ËHÌ·ªú;zh4“Ú³†YQœ¿ûYU€åè3¶tz'möIó»5ylº¨de‰r–sãkMÂÂù#ì*T\óF(­Fã <ÙğØr_u ‚Nş šGcûÁQ=Ú]'S×Y³Ö¿éìv!2K‘ŒBHüq ÌÍûÛò§†v‚ÇX¼dZĞ…Vãàg':÷ËåQV÷$µE–´C7şœí¶‚ÆıëùKÅ¤ôÎX·?Ò£ÏÜ@üñ d¿¿}¤K¹×P´›WU, Øƒ±~à|¼[²üà^ëÛ^ÒZ%i'öÏ%ÛeÄŸ_ùh=EhşÙ®ü;âÕ©Çb©ä–!ŠIFregÜí’NNúŸË:$«ñëäWY_¨ïú8E¾Ÿ¸©‚eı:æDû …A˜ß:§ì7a-³»©úl¬òCn(›Ó&Xc—¦Hÿ Mèà'")Ìh­:aãŒ~Ñ‚@?_;ı4H„£ËpfRªÏËˆvCäçÉ àãAÚõRh!³bb’"È¼”‚ª	ÜcÃAæ¿3©~^ºzè‚ÍyÊ4•À8Á*ÈÎ698L¾ƒSÒÚZİuiÒ<DÆ°…â¨²…Tàœ}ÙÆ‚®Ål,r$,ÎÑ¢†täŠÙÂ–ı¸ÎƒÍş?V^›¸’ÌÏbÍâå‹vŠ¢¤NbPÁIÉÏüt¿[÷[àÖ»}M¤[ì r/R¢ü¦‰±œ*– Œ’= •v¿nÛ¼vĞ6Yg¬òdP9`s¶<™ü'¶KIÅ=â‹Íª£¯Ù‚sÄ°'AGaoàW}ûû‰Â{òÏPàğ //·$Œz’|®Çíåßœ|3±ë`ví©-Ójh[Úvª°2ñöÃ0İÜaˆÇAåÿ >1ËóÕıè³*W”D‹Jßöı?ËAêÿ 1­U»
